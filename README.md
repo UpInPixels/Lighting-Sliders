@@ -2,6 +2,8 @@
 
 An automated setup tool and VRCFury prefab for VRChat avatars that adds full lighting, brightness, grayscale, and post-processing controls for Poiyomi materials.
 
+[![Add to VCC](https://img.shields.io/badge/VCC-Add%20to%20VCC-36a64f?style=for-the-badge&logo=vrchat&logoColor=white)](https://upinpixels.github.io/UpInPixels-Utilities/)
+
 ---
 
 ## Requirements
