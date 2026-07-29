@@ -17,7 +17,7 @@ An automated setup tool and VRCFury prefab for VRChat avatars that adds full lig
 ## Quick Setup (Automated Tool)
 
 1. Import **VRCFury** into your Unity project.
-2. Import `Lighting Sliders.unitypackage`.
+2. Import `Lighting Sliders.unitypackage` or use the VCC package!
 3. Open the setup tool from the top menu:
 **`Tools > UpInPixels > Lighting Sliders Setup`**
 4. Drag your **Avatar Root** into the **Avatar Root** target field.
