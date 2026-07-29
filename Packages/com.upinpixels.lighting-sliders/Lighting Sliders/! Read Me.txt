@@ -1,0 +1,27 @@
+Import VRCFury (https://vrcfury.com/download)
+Import Lighting Sliders.unitypackage
+
+How to install:
+1. Use the Setup script in Tools -> UpInPixels -> Lighting Sliders Setup
+2. Upload!
+
+Or
+
+1. Drag "Lighting Sliders" into the scene.
+2. Select all your Poiyomi Materials. If they are locked, right-click -> Thry -> Materials -> Unlock All. 
+   Within that same menu, select “Add to Cross Shader Editor”
+3. That brings up the Cross Shader Editor (What a surprise). 
+4. Right-click and set the properties listed as “Animated when locked”
+	> Shading/Light Data
+	  - Max Brightness
+	  - Min Brightness
+	  - Grayscale Lighting
+	> Global Modifiers & Data/Post Processing/PP Animations
+	  - Lighting Multiplier
+	  - Lighting Add
+	  - Emission Multiplier
+	  - Final Color Multiplier
+4. Upload!
+
+Add me on discord for support: TheUploader
+Thanks!
