@@ -1,0 +1,11 @@
+{
+  "name": "com.upinpixels.lighting-sliders",
+  "displayName": "Uppy - Lighting Sliders",
+  "version": "1.0.3",
+  "description": "Poiyomi Lighting Sliders.",
+  "author": {
+    "name": "Uppy"
+  },
+  "vpmDependencies": {
+  }
+}
