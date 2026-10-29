@@ -57,12 +57,17 @@ public class LightingSlidersSetup : EditorWindow
 
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-        showExtraMaterials = EditorGUILayout.Foldout(showExtraMaterials, "Extra Materials (optional)", true, EditorStyles.foldoutHeader);
+        showExtraMaterials = EditorGUILayout.Foldout(showExtraMaterials, "Extra Materials (optional)", true, EditorStyles.foldout);
 
         if (showExtraMaterials)
         {
-        EditorGUILayout.LabelField("Materials on the avatar (including animation swap materials) are found automatically. Add materials here only for ones not on the avatar.", EditorStyles.miniLabel);
-        EditorGUILayout.LabelField("You can also drag Poiyomi materials onto the Add button.", EditorStyles.miniLabel);
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        GUIStyle wrapMini = new GUIStyle(EditorStyles.miniLabel);
+        wrapMini.wordWrap = true;
+        EditorGUILayout.LabelField("Materials on the avatar (including animation swap materials) are found automatically. Only add materials that are not on the avatar.", wrapMini);
+        EditorGUILayout.LabelField("You can also drag Poiyomi materials onto the Add button.", wrapMini);
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.Space(2);
 
         if (customMaterials.Count > 0)
         {
@@ -81,7 +86,7 @@ public class LightingSlidersSetup : EditorWindow
             EditorGUILayout.EndScrollView();
         }
 
-        Rect addButtonRect = GUILayoutUtility.GetRect(new GUIContent("Add Extra Material"), GUI.skin.button, GUILayout.Height(25));
+        Rect addButtonRect = GUILayoutUtility.GetRect(new GUIContent("Add Extra Material"), GUI.skin.button, GUILayout.ExpandWidth(true), GUILayout.Height(25));
         if (GUI.Button(addButtonRect, "Add Extra Material"))
         {
             EditorGUIUtility.ShowObjectPicker<Material>(null, false, "", 0);
