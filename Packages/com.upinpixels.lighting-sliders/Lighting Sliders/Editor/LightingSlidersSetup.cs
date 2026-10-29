@@ -18,6 +18,9 @@ public class LightingSlidersSetup : EditorWindow
     private int lastProcessedCount = 0;
     private int lastErrorCount = 0;
 
+    private bool objectPickerPending = false;
+    private bool showExtraMaterials = false;
+
     private readonly string[] propertiesToAnimate = new string[]
     {
         "_LightingMonochromatic",
@@ -53,8 +56,13 @@ public class LightingSlidersSetup : EditorWindow
         EditorGUILayout.Space(4);
 
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-        EditorGUILayout.LabelField("Extra Materials", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Drag Poiyomi materials onto the Add button to include them.", EditorStyles.miniLabel);
+
+        showExtraMaterials = EditorGUILayout.Foldout(showExtraMaterials, "Extra Materials (optional)", true, EditorStyles.foldoutHeader);
+
+        if (showExtraMaterials)
+        {
+        EditorGUILayout.LabelField("Materials on the avatar (including animation swap materials) are found automatically. Add materials here only for ones not on the avatar.", EditorStyles.miniLabel);
+        EditorGUILayout.LabelField("You can also drag Poiyomi materials onto the Add button.", EditorStyles.miniLabel);
 
         if (customMaterials.Count > 0)
         {
@@ -73,10 +81,25 @@ public class LightingSlidersSetup : EditorWindow
             EditorGUILayout.EndScrollView();
         }
 
-        Rect addButtonRect = GUILayoutUtility.GetRect(new GUIContent("Add Material"), GUI.skin.button, GUILayout.Height(25));
-        if (GUI.Button(addButtonRect, "Add Material"))
+        Rect addButtonRect = GUILayoutUtility.GetRect(new GUIContent("Add Extra Material"), GUI.skin.button, GUILayout.Height(25));
+        if (GUI.Button(addButtonRect, "Add Extra Material"))
         {
-            customMaterials.Add(null);
+            EditorGUIUtility.ShowObjectPicker<Material>(null, false, "", 0);
+            objectPickerPending = true;
+        }
+
+        if (objectPickerPending && Event.current.commandName == "ObjectSelectorUpdated")
+        {
+            Material picked = EditorGUIUtility.GetObjectPickerObject() as Material;
+            if (picked != null)
+                customMaterials.Add(picked);
+            objectPickerPending = false;
+            Repaint();
+        }
+        else if (objectPickerPending && Event.current.commandName == "ObjectSelectorClosed")
+        {
+            objectPickerPending = false;
+            Repaint();
         }
 
         Event evt = Event.current;
@@ -103,6 +126,8 @@ public class LightingSlidersSetup : EditorWindow
                 }
                 break;
         }
+
+        } // end showExtraMaterials
 
         EditorGUILayout.EndVertical();
 
@@ -219,6 +244,13 @@ public class LightingSlidersSetup : EditorWindow
 
             string shaderName = originalShader.name;
             bool wasLocked = shaderName.Contains("Locked");
+
+            if (IsAlreadyConfigured(mat))
+            {
+                AddLog($"Skipping material '{mat.name}' – already configured (locked = {wasLocked}).");
+                processedCount++;
+                continue;
+            }
 
             AddLog($"Processing material: {mat.name} (locked = {wasLocked})");
 
@@ -437,6 +469,25 @@ public class LightingSlidersSetup : EditorWindow
         }
 
         return mats;
+    }
+
+    private bool IsAlreadyConfigured(Material mat)
+    {
+        bool foundAny = false;
+        foreach (string propName in propertiesToAnimate)
+        {
+            if (!mat.HasProperty(propName)) continue;
+            foundAny = true;
+
+            string tagName = propName + "Animated";
+            string current = mat.GetTag(tagName, false, "");
+            if (current != "1")
+                return false;
+        }
+
+        // If the material doesn't expose any of the target properties, there is nothing to configure.
+        // Treat it as already configured so we don't needlessly unlock/relock it.
+        return true;
     }
 
     private bool ApplyAnimationFlags(Material mat)
